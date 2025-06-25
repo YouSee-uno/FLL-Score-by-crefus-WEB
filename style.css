@@ -1,6 +1,7 @@
 /* 全体の基本設定 */
 body {
-    font-family: sans-serif;
+    /* Google Fontsから読み込んだBIZ UDゴシックを全体に適用 */
+    font-family: 'BIZ UDGothic', sans-serif;
     background-color: #f0f2f5;
     margin: 0;
     padding: 20px;
@@ -10,76 +11,85 @@ body {
 
 .app-container {
     width: 100%;
-    max-width: 800px; /* iPadなどでも見やすいように最大幅を設定 */
+    max-width: 800px;
     background-color: #ffffff;
     border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    overflow: hidden; /* コンテナの角丸を維持 */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
 }
 
-/* タブボタンのエリア */
+/* タブ */
 .tabs {
-    display: flex; /* ボタンを横並びにする */
+    display: flex;
     background-color: #e9ecef;
 }
 
-/* タブボタンのスタイル */
 .tab-button {
-    flex-grow: 1; /* ボタンが同じ幅で広がるようにする */
+    font-family: inherit;
+    flex-grow: 1;
     padding: 15px;
     border: none;
     background-color: transparent;
     font-size: 18px;
-    cursor: pointer; /* マウスを乗せると指マークになる */
-    border-bottom: 3px solid transparent; /* 未選択時の下の線 */
-    transition: all 0.2s ease-in-out; /* なめらかな変化 */
+    font-weight: bold;
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+    transition: all 0.2s ease-in-out;
 }
 
-/* タブボタンにマウスが乗った時のスタイル */
 .tab-button:hover {
     background-color: #dee2e6;
 }
 
-/* 選択されているタブのスタイル */
 .tab-button.active {
     color: #007bff;
-    border-bottom: 3px solid #007bff; /* 選択されていることを示す青い線 */
+    border-bottom: 3px solid #007bff;
 }
 
-/* コンテンツエリアのスタイル */
-.content {
-    padding: 20px;
-}
-
-/* コンテンツパネルの初期状態は非表示 */
+/* コンテンツ */
 .content-panel {
     display: none;
 }
-
-/* 表示するコンテンツパネルのスタイル */
 .content-panel.active {
-    display: block; /* 表示状態にする */
+    display: block;
 }
 
 /* --- TimerView Styles --- */
-
+#time.content-panel {
+    padding-bottom: 0;
+}
+.time-setter {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    padding: 20px;
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #dee2e6;
+}
+.time-setter select {
+    font-size: 16px;
+    padding: 5px;
+    border-radius: 4px;
+}
+.time-setter span {
+    font-size: 16px;
+}
 .timer-display {
+    font-family: 'BIZ UDGothic', monospace;
     font-size: 80px;
     font-weight: bold;
     text-align: center;
     padding: 40px 20px;
-    font-family: 'BIZ UDゴシック', 'BIZ UDGothic', monospace; /* カスタムフォントを適用 */
 }
-
 .timer-controls {
     display: flex;
     justify-content: center;
-    gap: 20px; /* ボタンの間の隙間 */
-    padding-bottom: 40px;
+    gap: 20px;
+    padding: 0 20px 20px 20px;
 }
-
 .timer-controls button {
-    font-family: 'BIZ UDゴシック', 'BIZ UDGothic', sans-serif;
+    font-family: inherit;
     font-weight: bold;
     font-size: 18px;
     color: white;
@@ -90,83 +100,41 @@ body {
     min-width: 120px;
     transition: background-color 0.2s;
 }
+.button-start { background-color: #28a745; }
+.button-start:hover { background-color: #218838; }
+.button-stop { background-color: #fd7e14; }
+.button-stop:hover { background-color: #e36d0a; }
+.button-reset { background-color: #6c757d; }
+.button-reset:hover { background-color: #5a6268; }
 
-.button-start {
-    background-color: #28a745; /* 緑 */
-}
-.button-start:hover {
-    background-color: #218838;
-}
-
-.button-stop {
-    background-color: #fd7e14; /* オレンジ */
-}
-.button-stop:hover {
-    background-color: #e36d0a;
-}
-
-.button-reset {
-    background-color: #6c757d; /* グレー */
-}
-.button-reset:hover {
-    background-color: #5a6268;
-}
-
-/* --- Time Setter Styles --- */
-.time-setter {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
-    padding: 20px;
-    background-color: #f8f9fa;
-    border-bottom: 1px solid #dee2e6;
-}
-
-.time-setter select {
-    font-size: 16px;
-    padding: 5px;
-}
-
-.time-setter span {
-    font-size: 16px;
-}
-
-/* --- Sub-Timer Styles --- */
 .sub-timers {
     display: flex;
-    justify-content: space-around; /* 左右に均等配置 */
+    justify-content: space-around;
     padding: 10px 20px;
     background-color: #f8f9fa;
     border-top: 1px solid #dee2e6;
 }
-
 .sub-timer-item {
     text-align: center;
 }
-
 .sub-timer-label {
     font-size: 16px;
     color: #6c757d;
-    font-family: 'BIZ UDゴシック', 'BIZ UDGothic', sans-serif;
 }
-
 .sub-timer-value {
     display: block;
+    font-family: 'BIZ UDGothic', monospace;
     font-size: 30px;
     font-weight: bold;
-    font-family: 'BIZ UDゴシック', 'BIZ UDGothic', monospace;
 }
 
-/* --- Exchange Button Styles --- */
 .exchange-control {
     padding: 20px;
     text-align: center;
     border-top: 1px solid #dee2e6;
 }
-
 #exchangeButton {
-    font-family: 'BIZ UDゴシック', 'BIZ UDGothic', sans-serif;
+    font-family: inherit;
     font-weight: bold;
     font-size: 20px;
     color: white;
@@ -175,46 +143,67 @@ body {
     padding: 15px 40px;
     width: 260px;
     cursor: pointer;
-    background-color: #6c757d; /* 非アクティブ時のグレー */
+    background-color: #6c757d;
     transition: background-color 0.2s, opacity 0.2s;
 }
-
 #exchangeButton.active {
-    background-color: #007bff; /* アクティブ時の青 */
+    background-color: #007bff;
 }
-
 #exchangeButton:disabled {
     opacity: 0.5;
     cursor: not-allowed;
 }
 
+.laps-container {
+    padding: 10px 20px 20px 20px;
+    max-height: 200px;
+    overflow-y: auto;
+    border-top: 1px solid #dee2e6;
+    background-color: #f8f9fa;
+}
+.lap-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 5px;
+    font-size: 16px;
+    border-bottom: 1px solid #e9ecef;
+}
+.lap-item:last-child {
+    border-bottom: none;
+}
+.lap-item span:first-child {
+    color: #495057;
+}
+.lap-item span:last-child {
+    font-family: 'BIZ UDGothic', monospace;
+    font-weight: bold;
+}
+
+
 /* --- ScoreView Styles --- */
+#score.content-panel {
+    padding: 0;
+}
 .total-score-container {
     padding: 20px;
     text-align: center;
     background-color: #f8f9fa;
 }
-
 .total-score-label {
     font-size: 24px;
     font-weight: bold;
-    font-family: 'BIZ UDゴシック', 'BIZ UDGothic', sans-serif;
 }
-
 .total-score-value {
     margin-top: 10px;
 }
-
 #totalScoreDisplay {
+    font-family: 'BIZ UDGothic', monospace;
     font-size: 36px;
     font-weight: bold;
-    font-family: 'BIZ UDゴシック', 'BIZ UDGothic', monospace;
 }
-
 .total-score-unit {
     font-size: 20px;
     margin-left: 4px;
-    font-family: 'BIZ UDゴシック', 'BIZ UDGothic', sans-serif;
 }
 
 .divider {
@@ -224,49 +213,39 @@ body {
 .mission-list {
     padding: 20px;
 }
-
 .mission-section {
     margin-bottom: 30px;
 }
-
 .mission-title {
     font-size: 25px;
-    font-family: 'BIZ UDゴシック', 'BIZ UDGothic', sans-serif;
     padding-bottom: 5px;
     border-bottom: 2px solid #6c757d;
     margin-bottom: 15px;
 }
-
 .mission-item {
     display: flex;
-    justify-content: space-between; /* ラベルとチェックボックスを左右に配置 */
+    justify-content: space-between;
     align-items: center;
     padding: 10px 0;
 }
-
 .mission-item label {
     font-size: 18px;
-    font-family: 'BIZ UDゴシック', 'BIZ UDGothic', sans-serif;
+    padding-right: 10px;
 }
-
 .mission-checkbox {
-    /* チェックボックスを大きく見せる */
+    flex-shrink: 0;
     transform: scale(1.5);
 }
-
-/* --- ScoreView Addon Styles --- */
 .mission-select {
     font-size: 16px;
     padding: 5px;
-    min-width: 120px; /* 最小幅 */
+    border-radius: 4px;
+    min-width: 120px;
 }
-
 .mission-description {
     font-size: 18px;
-    font-family: 'BIZ UDゴシック', 'BIZ UDGothic', sans-serif;
     margin-bottom: 5px;
 }
-
 .indent {
-    padding-left: 20px; /* インデント */
+    padding-left: 20px;
 }
