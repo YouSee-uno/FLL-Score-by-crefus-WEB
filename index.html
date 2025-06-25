@@ -4,17 +4,26 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FLL Score App</title>
+    <!-- 外部フォントの読み込み -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=BIZ+UDGothic:wght@400;700&display=swap" rel="stylesheet">
+    
+    <!-- CSSファイルの読み込み -->
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
     <div class="app-container">
+        <!-- タブボタン -->
         <div class="tabs">
             <button class="tab-button active" data-tab="time">Time</button>
             <button class="tab-button" data-tab="score">Score</button>
         </div>
 
+        <!-- コンテンツエリア -->
         <div class="content">
+            <!-- Timeタブの中身 -->
             <div id="time" class="content-panel active">
                 <div class="time-setter">
                     <select id="minutesSelect"></select>
@@ -33,19 +42,24 @@
                 <div class="sub-timers">
                     <div class="sub-timer-item">
                         <span class="sub-timer-label">交換時間</span>
-                        <span class="sub-timer-value" id="stopwatchTimeDisplay">0 秒</span>
+                        <span class="sub-timer-value" id="exchangeTimeDisplay">0 秒</span>
                     </div>
                     <div class="sub-timer-item">
                         <span class="sub-timer-label">走行時間</span>
-                        <span class="sub-timer-value" id="runningTimeDisplay">0 秒</span>
+                        <span class="sub-timer-value" id="runTimeDisplay">0 秒</span>
                     </div>
                 </div>
                 
                 <div class="exchange-control">
                     <button id="exchangeButton" disabled>交換中</button>
                 </div>
+
+                <div class="laps-container" id="lapsContainer">
+                    <!-- 記録はJavaScriptでここに追加されます -->
+                </div>
             </div>
 
+            <!-- Scoreタブの中身 -->
             <div id="score" class="content-panel">
                 <div class="total-score-container">
                     <span class="total-score-label">合計得点</span>
@@ -56,191 +70,14 @@
                 </div>
                 <div class="divider"></div>
 
-                <div class="mission-list">
-                    <div class="mission-section">
-                        <h3 class="mission-title">M01 サンゴの苗床</h3>
-                        <div class="mission-item">
-                            <label for="m01_treeOnSupport">サンゴの木がサンゴの木のサポートに掛かっている (+20)</label>
-                            <input type="checkbox" id="m01_treeOnSupport" class="mission-checkbox">
-                        </div>
-                        <div class="mission-item">
-                            <label for="m01_treeInHolder">サンゴの木の底面がホルダー内にある (ボーナス: +30)</label>
-                            <input type="checkbox" id="m01_treeInHolder" class="mission-checkbox">
-                        </div>
-                        <div class="mission-item">
-                            <label for="m01_coralSprout">サンゴの芽が上がっている (+20)</label>
-                            <input type="checkbox" id="m01_coralSprout" class="mission-checkbox">
-                        </div>
-                    </div>
-                    <div class="mission-section">
-                        <h3 class="mission-title">M02 サメ</h3>
-                        <div class="mission-item">
-                            <label for="m02_sharkNoContact">サメが洞窟に接触していない (+20)</label>
-                            <input type="checkbox" id="m02_sharkNoContact" class="mission-checkbox">
-                        </div>
-                        <div class="mission-item">
-                            <label for="m02_sharkInHabitat">サメがマットに接触し、生息地にインしている (+10)</label>
-                            <input type="checkbox" id="m02_sharkInHabitat" class="mission-checkbox">
-                        </div>
-                    </div>
-
-                    <div class="mission-section">
-                        <h3 class="mission-title">M03 サンゴ礁</h3>
-                        <div class="mission-item">
-                            <label for="m03_reefUp">サンゴ礁が上がり、マットに接触していない (+20)</label>
-                            <input type="checkbox" id="m03_reefUp" class="mission-checkbox">
-                        </div>
-                        <div class="mission-item">
-                            <label for="m03_fragmentsCount">サンゴ礁の断片が直立している (各+5)</label>
-                            <select id="m03_fragmentsCount" class="mission-select"></select>
-                        </div>
-                    </div>
-
-                    <div class="mission-section">
-                        <h3 class="mission-title">M04 スキューバダイバー</h3>
-                        <div class="mission-item">
-                            <label for="m04_scubaNoContact">スキューバダイバーがサンゴの苗床に接触していない (+20)</label>
-                            <input type="checkbox" id="m04_scubaNoContact" class="mission-checkbox">
-                        </div>
-                        <div class="mission-item">
-                            <label for="m04_scubaOnSupport">スキューバダイバーがサンゴ礁のサポートに掛かっている (+20)</label>
-                            <input type="checkbox" id="m04_scubaOnSupport" class="mission-checkbox">
-                        </div>
-                    </div>
-
-                    <div class="mission-section">
-                        <h3 class="mission-title">M05 アンコウ</h3>
-                        <div class="mission-item">
-                            <label for="m05_anglerfishLatched">アンコウが沈没船の中にラッチされている (+30)</label>
-                            <input type="checkbox" id="m05_anglerfishLatched" class="mission-checkbox">
-                        </div>
-                    </div>
-
-                    <div class="mission-section">
-                        <h3 class="mission-title">M06 マスト上げ</h3>
-                        <div class="mission-item">
-                            <label for="m06_mastUp">沈没船のマストが完全に上がっている (+30)</label>
-                            <input type="checkbox" id="m06_mastUp" class="mission-checkbox">
-                        </div>
-                    </div>
-
-                    <div class="mission-section">
-                        <h3 class="mission-title">M07 クラーケンの宝</h3>
-                        <div class="mission-item">
-                            <label for="m07_treasureOut">宝箱がクラーケンの巣の完全に外側にある (+20)</label>
-                            <input type="checkbox" id="m07_treasureOut" class="mission-checkbox">
-                        </div>
-                    </div>
-
-                    <div class="mission-section">
-                        <h3 class="mission-title">M08 人工生息地</h3>
-                        <div class="mission-item">
-                            <label for="m08_segmentsCount">人工生息地のスタックセグメントが完全に水平であり直立している (各+10)</label>
-                            <select id="m08_segmentsCount" class="mission-select"></select>
-                        </div>
-                    </div>
-
-                    <div class="mission-section">
-                        <h3 class="mission-title">M09 予期せぬ遭遇</h3>
-                        <div class="mission-item">
-                            <label for="m09_creatureReleased">未知の生物がリリースされている (+20)</label>
-                            <input type="checkbox" id="m09_creatureReleased" class="mission-checkbox">
-                        </div>
-                        <div class="mission-item">
-                            <label for="m09_creatureInVent">未知の生物が冷水湧出帯に少しでもインしている (+10)</label>
-                            <input type="checkbox" id="m09_creatureInVent" class="mission-checkbox">
-                        </div>
-                    </div>
-
-                    <div class="mission-section">
-                        <h3 class="mission-title">M10 潜水艇の派遣</h3>
-                        <div class="mission-item">
-                            <label for="m10_yellowFlagDown">自チームの黄色い旗が下がっている (+30)</label>
-                            <input type="checkbox" id="m10_yellowFlagDown" class="mission-checkbox">
-                        </div>
-                        <div class="mission-item">
-                            <label for="m10_subNearOpponent">潜水艇が明らかに相手フィールドに近づいている (+10)</label>
-                            <input type="checkbox" id="m10_subNearOpponent" class="mission-checkbox">
-                        </div>
-                    </div>
-
-                    <div class="mission-section">
-                        <h3 class="mission-title">M11 超音波探査</h3>
-                        <div class="mission-item">
-                            <label for="m11_whaleState">クジラが見えている</label>
-                            <select id="m11_whaleState" class="mission-select"></select>
-                        </div>
-                    </div>
-
-                    <div class="mission-section">
-                        <h3 class="mission-title">M12 クジラの餌やり</h3>
-                        <div class="mission-item">
-                            <label for="m12_krillCount">オキアミがクジラの口に少しでもインしている (各+10)</label>
-                            <select id="m12_krillCount" class="mission-select"></select>
-                        </div>
-                    </div>
-
-                    <div class="mission-section">
-                        <h3 class="mission-title">M13 船の航路変更</h3>
-                        <div class="mission-item">
-                            <label for="m13_shipOnNewPath">船が新しい航路にありマットに接触している (+20)</label>
-                            <input type="checkbox" id="m13_shipOnNewPath" class="mission-checkbox">
-                        </div>
-                    </div>
-
-                    <div class="mission-section">
-                        <h3 class="mission-title">M14 サンプル採取</h3>
-                        <div class="mission-item">
-                            <label for="m14_waterSampleOut">ウォーターサンプルがウォーターサンプルエリアの完全に外側にある (+5)</label>
-                            <input type="checkbox" id="m14_waterSampleOut" class="mission-checkbox">
-                        </div>
-                        <div class="mission-item">
-                            <label for="m14_seabedSampleNoContact">海底サンプルが海底に接触していない (+10)</label>
-                            <input type="checkbox" id="m14_seabedSampleNoContact" class="mission-checkbox">
-                        </div>
-                        <div class="mission-item">
-                            <label for="m14_planktonSampleNoContact">プランクトンサンプルがケルプの森に接触していない (+10)</label>
-                            <input type="checkbox" id="m14_planktonSampleNoContact" class="mission-checkbox">
-                        </div>
-                        <div class="mission-item">
-                            <label for="m14_tridentState">トライデントが沈没船に接触していない</label>
-                            <select id="m14_tridentState" class="mission-select"></select>
-                        </div>
-                    </div>
-
-                    <div class="mission-section">
-                        <h3 class="mission-title">M15 調査船</h3>
-                        <p class="mission-description">以下のものが調査船の貨物エリアに少しでもインしている:</p>
-                        <div class="mission-item indent">
-                            <label for="m15_samplesInCargo">サンプル (各+5)</label>
-                            <select id="m15_samplesInCargo" class="mission-select"></select>
-                        </div>
-                        <div class="mission-item indent">
-                            <label for="m15_tridentsInCargo">トライデント (各+5)</label>
-                            <select id="m15_tridentsInCargo" class="mission-select"></select>
-                        </div>
-                        <div class="mission-item indent">
-                            <label for="m15_treasureInCargo">宝箱 (+5)</label>
-                            <input type="checkbox" id="m15_treasureInCargo" class="mission-checkbox">
-                        </div>
-                        <div class="mission-item">
-                            <label for="m15_latchInLoop">港のラッチが調査船のループに少しでもインしている (+20)</label>
-                            <input type="checkbox" id="m15_latchInLoop" class="mission-checkbox">
-                        </div>
-                    </div>
-
-                    <div class="mission-section">
-                        <h3 class="mission-title">精密トークン</h3>
-                        <div class="mission-item">
-                            <label for="precisionTokens">ペナルティを受けずに残った個数</label>
-                            <select id="precisionTokens" class="mission-select"></select>
-                        </div>
-                    </div>
-                    </div>
+                <div class="mission-list" id="missionList">
+                    <!-- 全ミッションの骨格はJavaScriptで動的に生成されます -->
+                </div>
             </div>
         </div>
     </div>
 
+    <!-- JavaScriptファイルの読み込み -->
     <script src="script.js"></script>
 </body>
 </html>
