@@ -173,6 +173,14 @@ document.addEventListener('DOMContentLoaded', () => {
         laps.forEach(lap => {
             const lapElement = document.createElement('div');
             lapElement.className = 'lap-item';
+            
+            // 【ここを修正しました】ラベルに応じてクラスを追加
+            if (lap.label.includes('交換')) {
+                lapElement.classList.add('exchange');
+            } else if (lap.label.includes('走行')) {
+                lapElement.classList.add('run');
+            }
+            
             lapElement.innerHTML = `<span>${lap.label}</span><span>${lap.duration.toFixed(2)} 秒</span>`;
             elements.lapsContainer.appendChild(lapElement);
         });
