@@ -179,6 +179,14 @@ body {
     font-weight: bold;
 }
 
+/* 【ここを追加しました】ラップタイムの色指定 */
+.lap-item.exchange span:last-child {
+    color: #007bff; /* 青色 */
+}
+.lap-item.run span:last-child {
+    color: #dc3545; /* 赤色 */
+}
+
 
 /* --- ScoreView Styles --- */
 #score.content-panel {
