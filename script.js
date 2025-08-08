@@ -49,7 +49,8 @@ document.addEventListener('DOMContentLoaded', () => {
     let isRunning = false;
 
     // ラップタイム記録用の状態
-    let clickCount = 0;
+    let runCount = 0; // Runの回数
+    let exchangeCount = 0; // 交換の回数
     let lastLapTime = 0;
     let totalRunTime = 0;
     let totalExchangeTime = 0;
@@ -341,17 +342,17 @@ document.addEventListener('DOMContentLoaded', () => {
             const timeDiff = lastLapTime - timeLeft;
             lastLapTime = timeLeft;
             
-            clickCount++;
-            
-            if (clickCount % 2 === 1) {
-                const runNum = Math.ceil(clickCount / 2);
-                addLapTime(`交換 ${runNum}回目`, timeDiff);
+            if (exchangeButton.textContent === '交換') {
+                // 「交換」を押したとき（Runが完了したとき）
+                runCount++;
+                addLapTime(`${runCount} Run`, timeDiff);
                 totalRunTime += timeDiff;
                 totalRunTimeDisplay.textContent = totalRunTime;
                 exchangeButton.textContent = '走行';
             } else {
-                const runNum = clickCount / 2;
-                addLapTime(`${runNum} Run`, timeDiff);
+                // 「走行」を押したとき（交換が完了したとき）
+                exchangeCount++;
+                addLapTime(`交換 ${exchangeCount}回目`, timeDiff);
                 totalExchangeTime += timeDiff;
                 totalExchangeTimeDisplay.textContent = totalExchangeTime;
                 exchangeButton.textContent = '交換';
@@ -364,7 +365,8 @@ document.addEventListener('DOMContentLoaded', () => {
         isRunning = false;
         totalTime = 150;
         timeLeft = totalTime;
-        clickCount = 0;
+        runCount = 0; // Runのカウントをリセット
+        exchangeCount = 0; // 交換のカウントをリセット
         lastLapTime = 150;
         totalRunTime = 0;
         totalExchangeTime = 0;
@@ -373,7 +375,7 @@ document.addEventListener('DOMContentLoaded', () => {
         startStopButton.textContent = 'スタート';
         startStopButton.disabled = false;
         exchangeButton.disabled = true;
-        exchangeButton.textContent = '交換'; // ボタンのテキストを初期状態に戻す
+        exchangeButton.textContent = '交換';
         
         lapTimesList.innerHTML = '';
         totalRunTimeDisplay.textContent = '0';
