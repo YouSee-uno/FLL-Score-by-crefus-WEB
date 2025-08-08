@@ -3,81 +3,348 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FLL Score App</title>
-    <!-- 外部フォントの読み込み -->
+    <title>FLL Challenge UNEARTHED</title>
+    <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=BIZ+UDGothic:wght@400;700&display=swap" rel="stylesheet">
-    
-    <!-- CSSファイルの読み込み -->
-    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=BIZ+UD+Gothic&display=swap" rel="stylesheet">
 </head>
 <body>
+    <header>
+        <h1>FLL Challenge UNEARTHED</h1>
+        <nav class="tab-bar">
+            <button id="timerTab" class="tab-button active">ストップウォッチ</button>
+            <button id="scoreTab" class="tab-button">スコア集計</button>
+        </nav>
+    </header>
 
-    <div class="app-container">
-        <!-- タブボタン -->
-        <div class="tabs">
-            <button class="tab-button active" data-tab="time">Time</button>
-            <button class="tab-button" data-tab="score">Score</button>
-        </div>
-
-        <!-- コンテンツエリア -->
-        <div class="content">
-            <!-- Timeタブの中身 -->
-            <div id="time" class="content-panel active">
-                <div class="time-setter">
-                    <select id="minutesSelect"></select>
-                    <span>分</span>
-                    <select id="secondsSelect"></select>
-                    <span>秒</span>
+    <main>
+        <section id="timer-section" class="content active">
+            <div class="timer-display">
+                <canvas id="timer-circle" width="250" height="250"></canvas>
+                <div id="time-text">
+                    <input type="number" id="minutes-input" value="2" min="0" max="99">
+                    :
+                    <input type="number" id="seconds-input" value="30" min="0" max="59">
                 </div>
-
-                <div class="timer-display" id="mainTimerDisplay">02:30</div>
-
-                <div class="timer-controls">
-                    <button id="startStopButton" class="button-start">スタート</button>
-                    <button id="resetButton" class="button-reset">リセット</button>
+            </div>
+            <div class="timer-controls">
+                <button id="startStopButton">スタート</button>
+                <button id="exchangeButton" disabled>交換中</button>
+                <button id="resetButton">リセット</button>
+            </div>
+            <div class="lap-summary-container">
+                <ul id="lap-times">
+                    </ul>
+                <div id="total-times">
+                    <div>Run 合計: <span id="total-run-time">0</span>秒</div>
+                    <div>交換 合計: <span id="total-exchange-time">0</span>秒</div>
                 </div>
+            </div>
+        </section>
 
-                <div class="sub-timers">
-                    <div class="sub-timer-item">
-                        <span class="sub-timer-label">交換時間</span>
-                        <span class="sub-timer-value" id="exchangeTimeDisplay">0 秒</span>
+        <section id="score-section" class="content">
+            <h2>スコア集計<span id="score-header-value"> (0点)</span></h2>
+            <div class="score-form">
+                <div class="score-item">
+                    <h3>大きさ点検ボーナス</h3>
+                    <p>全てのロボットと装備が30.5cm以内に収まった</p>
+                    <div class="button-group" data-target="size-bonus">
+                        <button class="score-btn" data-value="true">Yes</button>
+                        <button class="score-btn" data-value="false">No</button>
                     </div>
-                    <div class="sub-timer-item">
-                        <span class="sub-timer-label">走行時間</span>
-                        <span class="sub-timer-value" id="runTimeDisplay">0 秒</span>
-                    </div>
+                    <p>得点: <span id="size-bonus-score">0</span>点</p>
                 </div>
                 
-                <div class="exchange-control">
-                    <button id="exchangeButton" disabled>交換中</button>
-                </div>
-
-                <div class="laps-container" id="lapsContainer">
-                    <!-- 記録はJavaScriptでここに追加されます -->
-                </div>
-            </div>
-
-            <!-- Scoreタブの中身 -->
-            <div id="score" class="content-panel">
-                <div class="total-score-container">
-                    <span class="total-score-label">合計得点</span>
-                    <div class="total-score-value">
-                        <span id="totalScoreDisplay">0</span>
-                        <span class="total-score-unit">点</span>
+                <div class="score-item">
+                    <h3>精密トークン</h3>
+                    <p>個数: </p>
+                    <div class="button-group" data-target="precision-tokens">
+                        <button class="score-btn" data-value="6">6</button>
+                        <button class="score-btn" data-value="5">5</button>
+                        <button class="score-btn" data-value="4">4</button>
+                        <button class="score-btn" data-value="3">3</button>
+                        <button class="score-btn" data-value="2">2</button>
+                        <button class="score-btn" data-value="1">1</button>
+                        <button class="score-btn" data-value="0">0</button>
                     </div>
+                    <p>得点: <span id="precision-tokens-score">0</span>点</p>
                 </div>
-                <div class="divider"></div>
+            
+                <div class="score-item">
+                    <h3>M01 表面清掃 ★</h3>
+                    <div class="score-option">
+                        <p>土層が完全に取り除かれ、マットに接触している:</p>
+                        <div class="button-group" data-target="m01-soil">
+                            <button class="score-btn" data-value="0">0点</button>
+                            <button class="score-btn" data-value="10">10点</button>
+                            <button class="score-btn" data-value="20">20点</button>
+                        </div>
+                    </div>
+                    <div class="score-option">
+                        <p>考古学者の発掘ブラシが発掘現場に接触していない:</p>
+                        <div class="button-group" data-target="m01-brush">
+                            <button class="score-btn" data-value="0">0点</button>
+                            <button class="score-btn" data-value="10">10点</button>
+                        </div>
+                    </div>
+                    <p>M01合計得点: <span id="m01-score">0</span>点</p>
+                </div>
 
-                <div class="mission-list" id="missionList">
-                    <!-- 全ミッションの骨格はJavaScriptで動的に生成されます -->
+                <div class="score-item">
+                    <h3>M02 地図の露出</h3>
+                    <p>表土のセクションが完全に取り除かれている:</p>
+                    <div class="button-group" data-target="m02-topsoil">
+                        <button class="score-btn" data-value="0">0点</button>
+                        <button class="score-btn" data-value="10">10点</button>
+                        <button class="score-btn" data-value="20">20点</button>
+                        <button class="score-btn" data-value="30">30点</button>
+                    </div>
+                    <p>M02合計得点: <span id="m02-score">0</span>点</p>
                 </div>
+                
+                <div class="score-item">
+                    <h3>M03 鉱抗の探査</h3>
+                    <div class="score-option">
+                        <p>自チームのトロッコが相手チームのフィールド上にある:</p>
+                        <div class="button-group" data-target="m03-your-cart">
+                            <button class="score-btn" data-value="0">0点</button>
+                            <button class="score-btn" data-value="30">30点</button>
+                        </div>
+                    </div>
+                    <div class="score-option">
+                        <p>相手チームのトロッコが自チームのフィールド上にある:</p>
+                        <div class="button-group" data-target="m03-opponent-cart">
+                            <button class="score-btn" data-value="0">0点</button>
+                            <button class="score-btn" data-value="10">10点</button>
+                        </div>
+                    </div>
+                    <p>M03合計得点: <span id="m03-score">0</span>点</p>
+                </div>
+
+                <div class="score-item">
+                    <h3>M04 慎重な回収 ★</h3>
+                    <div class="score-option">
+                        <p>貴重な鉱物が鉱山に接触していない:</p>
+                        <div class="button-group" data-target="m04-minerals">
+                            <button class="score-btn" data-value="0">0点</button>
+                            <button class="score-btn" data-value="30">30点</button>
+                        </div>
+                    </div>
+                    <div class="score-option">
+                        <p>両方の支柱が立っている:</p>
+                        <div class="button-group" data-target="m04-pillars">
+                            <button class="score-btn" data-value="0">0点</button>
+                            <button class="score-btn" data-value="10">10点</button>
+                        </div>
+                    </div>
+                    <p>M04合計得点: <span id="m04-score">0</span>点</p>
+                </div>
+                
+                <div class="score-item">
+                    <h3>M05 誰が住んでいた？ ★</h3>
+                    <p>床がまっすぐ上を向いている:</p>
+                    <div class="button-group" data-target="m05-floor">
+                        <button class="score-btn" data-value="0">0点</button>
+                        <button class="score-btn" data-value="30">30点</button>
+                    </div>
+                    <p>M05合計得点: <span id="m05-score">0</span>点</p>
+                </div>
+
+                <div class="score-item">
+                    <h3>M06 鍛治場</h3>
+                    <p>鉱石が鍛治場に接触していない:</p>
+                    <div class="button-group" data-target="m06-ore">
+                        <button class="score-btn" data-value="0">0点</button>
+                        <button class="score-btn" data-value="10">10点</button>
+                        <button class="score-btn" data-value="20">20点</button>
+                        <button class="score-btn" data-value="30">30点</button>
+                    </div>
+                    <p>M06合計得点: <span id="m06-score">0</span>点</p>
+                </div>
+
+                <div class="score-item">
+                    <h3>M07 力仕事</h3>
+                    <p>石臼が台座に接触していない:</p>
+                    <div class="button-group" data-target="m07-mortar">
+                        <button class="score-btn" data-value="0">0点</button>
+                        <button class="score-btn" data-value="30">30点</button>
+                    </div>
+                    <p>M07合計得点: <span id="m07-score">0</span>点</p>
+                </div>
+
+                <div class="score-item">
+                    <h3>M08 サイロ</h3>
+                    <p>保存食がサイロの外にある:</p>
+                    <div class="button-group" data-target="m08-food">
+                        <button class="score-btn" data-value="0">0点</button>
+                        <button class="score-btn" data-value="10">10点</button>
+                        <button class="score-btn" data-value="20">20点</button>
+                        <button class="score-btn" data-value="30">30点</button>
+                    </div>
+                    <p>M08合計得点: <span id="m08-score">0</span>点</p>
+                </div>
+
+                <div class="score-item">
+                    <h3>M09 何を売っていた？ ★</h3>
+                    <div class="score-option">
+                        <p>屋根が完全に持ち上がっている:</p>
+                        <div class="button-group" data-target="m09-roof">
+                            <button class="score-btn" data-value="0">0点</button>
+                            <button class="score-btn" data-value="20">20点</button>
+                        </div>
+                    </div>
+                    <div class="score-option">
+                        <p>市場の交易品が持ち上がっている:</p>
+                        <div class="button-group" data-target="m09-goods">
+                            <button class="score-btn" data-value="0">0点</button>
+                            <button class="score-btn" data-value="10">10点</button>
+                        </div>
+                    </div>
+                    <p>M09合計得点: <span id="m09-score">0</span>点</p>
+                </div>
+
+                <div class="score-item">
+                    <h3>M10 はかり</h3>
+                    <div class="score-option">
+                        <p>はかりが傾き、マットに接触している:</p>
+                        <div class="button-group" data-target="m10-scale-tilt">
+                            <button class="score-btn" data-value="0">0点</button>
+                            <button class="score-btn" data-value="20">20点</button>
+                        </div>
+                    </div>
+                    <div class="score-option">
+                        <p>はかりの皿が完全に取り除かれている:</p>
+                        <div class="button-group" data-target="m10-scale-dish">
+                            <button class="score-btn" data-value="0">0点</button>
+                            <button class="score-btn" data-value="10">10点</button>
+                        </div>
+                    </div>
+                    <p>M10合計得点: <span id="m10-score">0</span>点</p>
+                </div>
+
+                <div class="score-item">
+                    <h3>M11 港の遺物 ★</h3>
+                    <div class="score-option">
+                        <p>遺物が地表の上に持ち上がっている:</p>
+                        <div class="button-group" data-target="m11-relic-lift">
+                            <button class="score-btn" data-value="0">0点</button>
+                            <button class="score-btn" data-value="20">20点</button>
+                        </div>
+                    </div>
+                    <div class="score-option">
+                        <p>クレーンの旗が少しでも下がっている:</p>
+                        <div class="button-group" data-target="m11-flag-down">
+                            <button class="score-btn" data-value="0">0点</button>
+                            <button class="score-btn" data-value="10">10点</button>
+                        </div>
+                    </div>
+                    <p>M11合計得点: <span id="m11-score">0</span>点</p>
+                </div>
+
+                <div class="score-item">
+                    <h3>M12 船の救出 ★</h3>
+                    <div class="score-option">
+                        <p>砂が完全に取り除かれている:</p>
+                        <div class="button-group" data-target="m12-sand">
+                            <button class="score-btn" data-value="0">0点</button>
+                            <button class="score-btn" data-value="20">20点</button>
+                        </div>
+                    </div>
+                    <div class="score-option">
+                        <p>船が完全に持ち上がっている:</p>
+                        <div class="button-group" data-target="m12-boat">
+                            <button class="score-btn" data-value="0">0点</button>
+                            <button class="score-btn" data-value="10">10点</button>
+                        </div>
+                    </div>
+                    <p>M12合計得点: <span id="m12-score">0</span>点</p>
+                </div>
+
+                <div class="score-item">
+                    <h3>M13 像の復元 ★</h3>
+                    <p>像が完全に持ち上がっている:</p>
+                    <div class="button-group" data-target="m13-statue">
+                        <button class="score-btn" data-value="0">0点</button>
+                        <button class="score-btn" data-value="30">30点</button>
+                    </div>
+                    <p>M13合計得点: <span id="m13-score">0</span>点</p>
+                </div>
+
+                <div class="score-item">
+                    <h3>M14 フォーラム ★</h3>
+                    <div class="score-option">
+                        <p>ブラシ:</p>
+                        <div class="button-group" data-target="m14-brush">
+                            <button class="score-btn" data-value="0">0点</button>
+                            <button class="score-btn" data-value="5">5点</button>
+                        </div>
+                    </div>
+                    <div class="score-option">
+                        <p>トロッコ:</p>
+                        <div class="button-group" data-target="m14-cart">
+                            <button class="score-btn" data-value="0">0点</button>
+                            <button class="score-btn" data-value="5">5点</button>
+                        </div>
+                    </div>
+                    <div class="score-option">
+                        <p>はかりの皿:</p>
+                        <div class="button-group" data-target="m14-dish">
+                            <button class="score-btn" data-value="0">0点</button>
+                            <button class="score-btn" data-value="5">5点</button>
+                        </div>
+                    </div>
+                    <div class="score-option">
+                        <p>表土:</p>
+                        <div class="button-group" data-target="m14-topsoil">
+                            <button class="score-btn" data-value="0">0点</button>
+                            <button class="score-btn" data-value="5">5点</button>
+                        </div>
+                    </div>
+                    <div class="score-option">
+                        <p>貴重な遺物:</p>
+                        <div class="button-group" data-target="m14-relic">
+                            <button class="score-btn" data-value="0">0点</button>
+                            <button class="score-btn" data-value="5">5点</button>
+                        </div>
+                    </div>
+                    <div class="score-option">
+                        <p>化石化した遺物を含む鉱石:</p>
+                        <div class="button-group" data-target="m14-ore">
+                            <button class="score-btn" data-value="0">0点</button>
+                            <button class="score-btn" data-value="5">5点</button>
+                        </div>
+                    </div>
+                    <div class="score-option">
+                        <p>石臼:</p>
+                        <div class="button-group" data-target="m14-mortar">
+                            <button class="score-btn" data-value="0">0点</button>
+                            <button class="score-btn" data-value="5">5点</button>
+                        </div>
+                    </div>
+                    <p>M14合計得点: <span id="m14-score">0</span>点</p>
+                </div>
+
+                <div class="score-item">
+                    <h3>M15 発見現場のマーケティング</h3>
+                    <p>旗が少しでも発掘現場内に入り、マットに接触している:</p>
+                    <div class="button-group" data-target="m15-flag">
+                        <button class="score-btn" data-value="0">0点</button>
+                        <button class="score-btn" data-value="10">10点</button>
+                        <button class="score-btn" data-value="20">20点</button>
+                        <button class="score-btn" data-value="30">30点</button>
+                    </div>
+                    <p>M15合計得点: <span id="m15-score">0</span>点</p>
+                </div>
+
             </div>
-        </div>
-    </div>
 
-    <!-- JavaScriptファイルの読み込み -->
+            <div class="total-score">
+                <h3>合計点数: <span id="total-score-value">0</span>点</h3>
+            </div>
+        </section>
+    </main>
+
     <script src="script.js"></script>
 </body>
 </html>

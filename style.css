@@ -1,259 +1,279 @@
-/* 全体の基本設定 */
 body {
-    /* Google Fontsから読み込んだBIZ UDゴシックを全体に適用 */
-    font-family: 'BIZ UDGothic', sans-serif;
-    background-color: #f0f2f5;
+    font-family: 'BIZ UD Gothic', sans-serif;
+    text-align: center;
+    background-color: #f4f4f4;
     margin: 0;
-    padding: 20px;
+    padding: 0;
+}
+
+header {
+    background-color: #333;
+    color: white;
+    padding: 1rem;
+}
+
+.tab-bar {
     display: flex;
     justify-content: center;
-}
-
-.app-container {
-    width: 100%;
-    max-width: 800px;
-    background-color: #ffffff;
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    overflow: hidden;
-}
-
-/* タブ */
-.tabs {
-    display: flex;
-    background-color: #e9ecef;
+    margin-top: 1rem;
 }
 
 .tab-button {
-    font-family: inherit;
-    flex-grow: 1;
-    padding: 15px;
-    border: none;
-    background-color: transparent;
-    font-size: 18px;
-    font-weight: bold;
-    cursor: pointer;
-    border-bottom: 3px solid transparent;
-    transition: all 0.2s ease-in-out;
-}
-
-.tab-button:hover {
-    background-color: #dee2e6;
-}
-
-.tab-button.active {
-    color: #007bff;
-    border-bottom: 3px solid #007bff;
-}
-
-/* コンテンツ */
-.content-panel {
-    display: none;
-}
-.content-panel.active {
-    display: block;
-}
-
-/* --- TimerView Styles --- */
-#time.content-panel {
-    padding-bottom: 0;
-}
-.time-setter {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
-    padding: 20px;
-    background-color: #f8f9fa;
-    border-bottom: 1px solid #dee2e6;
-}
-.time-setter select {
-    font-size: 16px;
-    padding: 5px;
-    border-radius: 4px;
-}
-.time-setter span {
-    font-size: 16px;
-}
-.timer-display {
-    font-family: 'BIZ UDGothic', monospace;
-    font-size: 80px;
-    font-weight: bold;
-    text-align: center;
-    padding: 40px 20px;
-}
-.timer-controls {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    padding: 0 20px 20px 20px;
-}
-.timer-controls button {
-    font-family: inherit;
-    font-weight: bold;
-    font-size: 18px;
+    background-color: #555;
     color: white;
     border: none;
-    border-radius: 15px;
-    padding: 15px 30px;
-    cursor: pointer;
-    min-width: 120px;
-    transition: background-color 0.2s;
-}
-.button-start { background-color: #28a745; }
-.button-start:hover { background-color: #218838; }
-.button-stop { background-color: #fd7e14; }
-.button-stop:hover { background-color: #e36d0a; }
-.button-reset { background-color: #6c757d; }
-.button-reset:hover { background-color: #5a6268; }
-
-.sub-timers {
-    display: flex;
-    justify-content: space-around;
     padding: 10px 20px;
-    background-color: #f8f9fa;
-    border-top: 1px solid #dee2e6;
-}
-.sub-timer-item {
-    text-align: center;
-}
-.sub-timer-label {
+    cursor: pointer;
     font-size: 16px;
-    color: #6c757d;
-}
-.sub-timer-value {
-    display: block;
-    font-family: 'BIZ UDGothic', monospace;
-    font-size: 30px;
-    font-weight: bold;
+    transition: background-color 0.3s;
 }
 
-.exchange-control {
-    padding: 20px;
-    text-align: center;
-    border-top: 1px solid #dee2e6;
-}
-#exchangeButton {
-    font-family: inherit;
-    font-weight: bold;
-    font-size: 20px;
-    color: white;
-    border: none;
-    border-radius: 15px;
-    padding: 15px 40px;
-    width: 260px;
-    cursor: pointer;
-    background-color: #6c757d;
-    transition: background-color 0.2s, opacity 0.2s;
-}
-#exchangeButton.active {
+.tab-button:hover, .tab-button.active {
     background-color: #007bff;
 }
-#exchangeButton:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
+
+.content {
+    display: none;
+    padding: 2rem;
 }
 
-.laps-container {
-    padding: 10px 20px 20px 20px;
-    max-height: 200px;
-    overflow-y: auto;
-    border-top: 1px solid #dee2e6;
-    background-color: #f8f9fa;
+.content.active {
+    display: block;
 }
-.lap-item {
+
+.timer-display {
+    position: relative;
+    width: 250px;
+    height: 250px;
+    margin: 2rem auto;
+}
+
+#timer-circle {
+    /* HTMLでwidthとheightを設定しているため、CSSでは不要 */
+}
+
+#time-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 36px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#time-text input {
+    width: 50px;
+    font-size: 36px;
+    font-weight: bold;
+    text-align: center;
+    border: none;
+    background: transparent;
+    padding: 0;
+}
+
+#time-text input:focus {
+    outline: 2px solid #007bff;
+}
+
+/* ナンバー入力欄の矢印（スピナーボタン）を非表示にする */
+#time-text input::-webkit-outer-spin-button,
+#time-text input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+#time-text input[type=number] {
+  -moz-appearance: textfield;
+}
+
+.timer-controls button {
+    font-size: 18px;
+    padding: 10px 20px;
+    margin: 5px;
+    cursor: pointer;
+    background-color: white;
+    border-radius: 5px;
+}
+
+/* スタート/ストップボタンのスタイル */
+#startStopButton {
+    border: 2px solid #ff7f00; /* オレンジの枠線 */
+    color: #ff7f00; /* 文字色も枠線と同じ色に */
+}
+
+#startStopButton:hover {
+    background-color: #fff3e6; /* ホバー時の色 */
+}
+
+/* 交換中ボタンのスタイル */
+#exchangeButton {
+    border: 2px solid #28a745; /* 緑の枠線 */
+    color: #28a745;
+}
+
+#exchangeButton:hover {
+    background-color: #e6f5e9;
+}
+
+/* リセットボタンのスタイル */
+#resetButton {
+    border: 2px solid #dc3545; /* 赤の枠線 */
+    color: #dc3545;
+}
+
+#resetButton:hover {
+    background-color: #fcebeb;
+}
+
+.lap-summary-container {
+    display: flex;
+    justify-content: center;
+    gap: 50px;
+    margin-top: 20px;
+}
+
+#lap-times {
+    list-style: none;
+    padding: 0;
+    font-size: 18px;
+    text-align: left;
+    max-width: 300px;
+}
+
+#lap-times li {
+    background-color: #e9ecef;
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 5px;
     display: flex;
     justify-content: space-between;
-    padding: 8px 5px;
-    font-size: 16px;
-    border-bottom: 1px solid #e9ecef;
+    width: 250px;
 }
-.lap-item:last-child {
-    border-bottom: none;
+
+#total-times {
+    font-size: 18px;
+    text-align: left;
 }
-.lap-item span:first-child {
-    color: #495057;
-}
-.lap-item span:last-child {
-    font-family: 'BIZ UDGothic', monospace;
+
+#total-times div {
+    margin-bottom: 10px;
     font-weight: bold;
 }
 
-/* 【ここを追加しました】ラップタイムの色指定 */
-.lap-item.exchange span:last-child {
-    color: #007bff; /* 青色 */
-}
-.lap-item.run span:last-child {
-    color: #dc3545; /* 赤色 */
+/* ...（これまでのCSSコード）... */
+
+#score-section {
+    max-width: 600px;
+    margin: 0 auto;
+    text-align: left;
 }
 
-
-/* --- ScoreView Styles --- */
-#score.content-panel {
-    padding: 0;
-}
-.total-score-container {
+.score-form {
+    background-color: #fff;
     padding: 20px;
-    text-align: center;
-    background-color: #f8f9fa;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
-.total-score-label {
+
+.score-item {
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 15px;
+    margin-bottom: 15px;
+}
+
+.score-item h3 {
+    margin-top: 0;
+}
+
+.score-item label {
+    display: inline-block;
+    margin-right: 15px;
+}
+
+#precision-tokens {
+    width: 50px;
+    text-align: center;
+    font-size: 16px;
+}
+
+.total-score {
+    text-align: right;
+    margin-top: 20px;
     font-size: 24px;
     font-weight: bold;
 }
-.total-score-value {
-    margin-top: 10px;
-}
-#totalScoreDisplay {
-    font-family: 'BIZ UDGothic', monospace;
-    font-size: 36px;
-    font-weight: bold;
-}
-.total-score-unit {
-    font-size: 20px;
-    margin-left: 4px;
-}
 
-.divider {
-    border-bottom: 1px solid #dee2e6;
-}
-
-.mission-list {
+/* ...（これまでのCSSコード）... */
+.score-form {
+    background-color: #fff;
     padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
-.mission-section {
-    margin-bottom: 30px;
-}
-.mission-title {
-    font-size: 25px;
-    padding-bottom: 5px;
-    border-bottom: 2px solid #6c757d;
+
+.score-item {
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 15px;
     margin-bottom: 15px;
 }
-.mission-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 0;
+
+.score-item h3 {
+    margin-top: 0;
 }
-.mission-item label {
-    font-size: 18px;
-    padding-right: 10px;
+
+.score-item label {
+    display: inline-block;
+    margin-right: 15px;
 }
-.mission-checkbox {
-    flex-shrink: 0;
-    transform: scale(1.5);
+
+.score-option {
+    margin: 10px 0;
 }
-.mission-select {
+
+#precision-tokens {
+    width: 50px;
+    text-align: center;
     font-size: 16px;
-    padding: 5px;
-    border-radius: 4px;
-    min-width: 120px;
 }
-.mission-description {
-    font-size: 18px;
-    margin-bottom: 5px;
+
+.total-score {
+    text-align: right;
+    margin-top: 20px;
+    font-size: 24px;
+    font-weight: bold;
 }
-.indent {
-    padding-left: 20px;
+
+/* ...（これまでのCSSコード）... */
+
+.button-group {
+    display: flex;
+    gap: 5px;
+    flex-wrap: wrap;
+    margin-top: 5px;
 }
+
+.score-btn {
+    padding: 8px 12px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    background-color: #f8f9fa;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.2s, border-color 0.2s;
+}
+
+.score-btn:hover {
+    background-color: #e2e6ea;
+}
+
+/* 選択されたボタンのスタイル */
+.score-btn.selected {
+    background-color: #007bff;
+    color: white;
+    border-color: #007bff;
+}
+
+/* ...（その他のCSSコード）... */
