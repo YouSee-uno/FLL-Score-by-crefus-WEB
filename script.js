@@ -9,6 +9,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const exchangeButton = document.getElementById('exchangeButton');
     const resetButton = document.getElementById('resetButton');
 
+    // 新しいスコアリセットボタンの要素を取得
+    const scoreResetButton = document.getElementById('scoreResetButton');
+
     const minutesInput = document.getElementById('minutes-input');
     const secondsInput = document.getElementById('seconds-input');
     const canvas = document.getElementById('timer-circle');
@@ -49,8 +52,8 @@ document.addEventListener('DOMContentLoaded', () => {
     let isRunning = false;
 
     // ラップタイム記録用の状態
-    let runCount = 0; // Runの回数
-    let exchangeCount = 0; // 交換の回数
+    let runCount = 0;
+    let exchangeCount = 0;
     let lastLapTime = 0;
     let totalRunTime = 0;
     let totalExchangeTime = 0;
@@ -343,14 +346,12 @@ document.addEventListener('DOMContentLoaded', () => {
             lastLapTime = timeLeft;
             
             if (exchangeButton.textContent === '交換') {
-                // 「交換」を押したとき（Runが完了したとき）
                 runCount++;
                 addLapTime(`${runCount} Run`, timeDiff);
                 totalRunTime += timeDiff;
                 totalRunTimeDisplay.textContent = totalRunTime;
                 exchangeButton.textContent = '走行';
             } else {
-                // 「走行」を押したとき（交換が完了したとき）
                 exchangeCount++;
                 addLapTime(`交換 ${exchangeCount}回目`, timeDiff);
                 totalExchangeTime += timeDiff;
@@ -365,8 +366,8 @@ document.addEventListener('DOMContentLoaded', () => {
         isRunning = false;
         totalTime = 150;
         timeLeft = totalTime;
-        runCount = 0; // Runのカウントをリセット
-        exchangeCount = 0; // 交換のカウントをリセット
+        runCount = 0;
+        exchangeCount = 0;
         lastLapTime = 150;
         totalRunTime = 0;
         totalExchangeTime = 0;
@@ -382,6 +383,12 @@ document.addEventListener('DOMContentLoaded', () => {
         totalExchangeTimeDisplay.textContent = '0';
 
         // スコア集計のリセット
+        resetScoreButtons();
+        calculateScore();
+    });
+
+    // 新しく追加したスコア用リセットボタンのイベント
+    scoreResetButton.addEventListener('click', () => {
         resetScoreButtons();
         calculateScore();
     });

@@ -276,4 +276,27 @@ header {
     border-color: #007bff;
 }
 
-/* ...（その他のCSSコード）... */
+/* ...（これまでのCSSコード）... */
+
+.total-score {
+    text-align: right;
+    margin-top: 20px;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+/* スコア集計用リセットボタンのスタイル */
+.score-reset-button {
+    font-size: 18px;
+    padding: 10px 20px;
+    margin-top: 20px;
+    cursor: pointer;
+    background-color: #dc3545; /* 赤色 */
+    color: white;
+    border: none;
+    border-radius: 5px;
+}
+
+.score-reset-button:hover {
+    background-color: #c82333;
+}
