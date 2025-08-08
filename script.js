@@ -35,7 +35,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const m12ScoreDisplay = document.getElementById('m12-score');
     const m13ScoreDisplay = document.getElementById('m13-score');
     const m14ScoreDisplay = document.getElementById('m14-score');
-    const m15ScoreDisplay = document.getElementById('m15-score'); // M15の表示要素を追加
+    const m15ScoreDisplay = document.getElementById('m15-score');
     
     const totalScoreDisplay = document.getElementById('total-score-value');
     const scoreHeaderValue = document.getElementById('score-header-value');
@@ -77,7 +77,7 @@ document.addEventListener('DOMContentLoaded', () => {
         let m12Score = 0;
         let m13Score = 0;
         let m14Score = 0;
-        let m15Score = 0; // M15のスコア変数
+        let m15Score = 0;
         let totalScore = 0;
 
         // 大きさ点検ボーナスの計算
@@ -345,14 +345,16 @@ document.addEventListener('DOMContentLoaded', () => {
             
             if (clickCount % 2 === 1) {
                 const runNum = Math.ceil(clickCount / 2);
-                addLapTime(`${runNum} Run`, timeDiff);
+                addLapTime(`交換 ${runNum}回目`, timeDiff);
                 totalRunTime += timeDiff;
                 totalRunTimeDisplay.textContent = totalRunTime;
+                exchangeButton.textContent = '走行';
             } else {
-                const exchangeNum = clickCount / 2;
-                addLapTime(`交換 ${exchangeNum}回目`, timeDiff);
+                const runNum = clickCount / 2;
+                addLapTime(`${runNum} Run`, timeDiff);
                 totalExchangeTime += timeDiff;
                 totalExchangeTimeDisplay.textContent = totalExchangeTime;
+                exchangeButton.textContent = '交換';
             }
         }
     });
@@ -371,6 +373,7 @@ document.addEventListener('DOMContentLoaded', () => {
         startStopButton.textContent = 'スタート';
         startStopButton.disabled = false;
         exchangeButton.disabled = true;
+        exchangeButton.textContent = '交換'; // ボタンのテキストを初期状態に戻す
         
         lapTimesList.innerHTML = '';
         totalRunTimeDisplay.textContent = '0';
@@ -417,7 +420,7 @@ document.addEventListener('DOMContentLoaded', () => {
         document.querySelector('.button-group[data-target="m14-relic"] .score-btn[data-value="0"]').classList.add('selected');
         document.querySelector('.button-group[data-target="m14-ore"] .score-btn[data-value="0"]').classList.add('selected');
         document.querySelector('.button-group[data-target="m14-mortar"] .score-btn[data-value="0"]').classList.add('selected');
-        document.querySelector('.button-group[data-target="m15-flag"] .score-btn[data-value="0"]').classList.add('selected'); // M15のデフォルトボタンを選択
+        document.querySelector('.button-group[data-target="m15-flag"] .score-btn[data-value="0"]').classList.add('selected');
     }
 
     // ページ読み込み時にデフォルトのボタンを選択
