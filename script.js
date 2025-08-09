@@ -12,6 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const resetButton = document.getElementById('resetButton');
     const scoreResetButton = document.getElementById('scoreResetButton');
     const saveScoreButton = document.getElementById('saveScoreButton');
+    const downloadButton = document.getElementById('downloadButton');
 
     const minutesInput = document.getElementById('minutes-input');
     const secondsInput = document.getElementById('seconds-input');
@@ -46,17 +47,21 @@ document.addEventListener('DOMContentLoaded', () => {
     const scoreHistoryList = document.getElementById('score-history-list');
 
     const scoreForm = document.querySelector('.score-form');
+    
+    const scoreLabels = [
+        '大きさ点検ボーナス', '精密トークン', 'M01 表面清掃', 'M02 地図の露出', 'M03 鉱抗の探査', 'M04 慎重な回収',
+        'M05 誰が住んでいた？', 'M06 鍛治場', 'M07 力仕事', 'M08 サイロ', 'M09 何を売っていた？', 'M10 はかり',
+        'M11 港の遺物', 'M12 船の救出', 'M13 像の復元', 'M14 フォーラム', 'M15 発見現場のマーケティング'
+    ];
 
-    // タイマーの設定
+    let savedScores = [];
+    let isRunning = false;
+    let timerInterval;
     let totalTime = 150;
     let timeLeft = totalTime;
-    let timerInterval;
-    let isRunning = false;
-
-    // ラップタイム記録用の状態
     let runCount = 0;
     let exchangeCount = 0;
-    let lastLapTime = 0;
+    let lastLapTime = totalTime;
     let totalRunTime = 0;
     let totalExchangeTime = 0;
 
@@ -253,6 +258,7 @@ document.addEventListener('DOMContentLoaded', () => {
         historySection.classList.add('active');
         scoreSection.classList.remove('active');
         timerSection.classList.remove('active');
+        updateHistoryList();
     });
 
     // --- タイマー機能 ---
@@ -387,34 +393,79 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     saveScoreButton.addEventListener('click', () => {
-        const li = document.createElement('li');
-        li.classList.add('saved-score-item');
-
-        const scoreItems = document.querySelectorAll('.score-item h3');
-        const scoreValues = document.querySelectorAll('.score-item p span:last-child');
-        
-        let detailsHtml = '';
-        
-        scoreItems.forEach((item, index) => {
-            const title = item.textContent.trim();
-            const value = scoreValues[index].textContent;
-            detailsHtml += `<div class="history-details-item"><span class="label">${title}:</span><span>${value}</span></div>`;
+        const scoreData = {
+            '保存日時': new Date().toLocaleString(),
+            '合計得点': totalScoreDisplay.textContent
+        };
+        scoreLabels.forEach(label => {
+            const scoreSpan = document.getElementById(`${label.split(' ')[0].toLowerCase()}-score`);
+            scoreData[label] = scoreSpan ? scoreSpan.textContent.replace('点', '').trim() : '0';
         });
 
-        const timestamp = new Date().toLocaleString();
-        const totalScore = totalScoreDisplay.textContent;
-
-        li.innerHTML = `
-            <div class="history-header">
-                <span>保存日時: ${timestamp}</span>
-                <span>合計: ${totalScore}点</span>
-            </div>
-            <div class="history-details">
-                ${detailsHtml}
-            </div>
-        `;
-        scoreHistoryList.prepend(li); // 新しい記録を先頭に追加
+        savedScores.push(scoreData);
+        updateHistoryList();
     });
+    
+    downloadButton.addEventListener('click', () => {
+        if (savedScores.length === 0) {
+            alert('ダウンロードする履歴がありません。');
+            return;
+        }
+
+        let csvContent = '\uFEFF';
+        
+        const headers = ['ミッション名'].concat(savedScores.map((_, index) => `記録 ${index + 1}`));
+        csvContent += headers.join(',') + '\n';
+        
+        const allLabels = ['合計得点', '保存日時'].concat(scoreLabels);
+        allLabels.forEach(label => {
+            const row = savedScores.map(score => score[label] ? score[label].replace(',', '') : '0');
+            csvContent += `"${label}",` + row.join(',') + '\n';
+        });
+
+        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement('a');
+        const url = URL.createObjectURL(blob);
+        link.setAttribute('href', url);
+        link.setAttribute('download', `FLL_scores_${new Date().toISOString().slice(0, 10)}.csv`);
+        link.style.visibility = 'hidden';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    });
+
+    function updateHistoryList() {
+        scoreHistoryList.innerHTML = '';
+        
+        if (savedScores.length === 0) {
+            return;
+        }
+
+        const missionHeaders = ['合計得点', '保存日時'].concat(scoreLabels);
+        
+        const headerRow = document.createElement('li');
+        headerRow.classList.add('history-table-row', 'history-table-header');
+        
+        let headerHtml = `<div class="history-table-cell">ミッション名</div>`;
+        savedScores.forEach((_, index) => {
+            headerHtml += `<div class="history-table-cell">記録 ${index + 1}</div>`;
+        });
+        headerRow.innerHTML = headerHtml;
+        scoreHistoryList.appendChild(headerRow);
+
+        missionHeaders.forEach(mission => {
+            const row = document.createElement('li');
+            row.classList.add('history-table-row');
+            
+            let rowHtml = `<div class="history-table-cell">${mission}</div>`;
+            savedScores.forEach(score => {
+                const value = score[mission] || '0';
+                rowHtml += `<div class="history-table-cell">${value}</div>`;
+            });
+            row.innerHTML = rowHtml;
+            scoreHistoryList.appendChild(row);
+        });
+    }
 
     function resetScoreButtons() {
         document.querySelectorAll('.score-btn').forEach(btn => {

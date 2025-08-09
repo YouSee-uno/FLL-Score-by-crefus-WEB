@@ -20,6 +20,7 @@
 
     <main>
         <section id="timer-section" class="content active">
+            <h2>ストップウォッチ</h2>
             <div class="timer-display">
                 <canvas id="timer-circle" width="250" height="250"></canvas>
                 <div id="time-text">
@@ -349,7 +350,8 @@
         <section id="history-section" class="content">
             <h2>履歴</h2>
             <div class="saved-scores-container">
-                <div id="score-history-list"></div>
+                <ul id="score-history-list"></ul>
+                <button id="downloadButton" class="download-button">履歴をCSVでダウンロード</button>
             </div>
         </section>
     </main>
