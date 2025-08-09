@@ -2,13 +2,16 @@ document.addEventListener('DOMContentLoaded', () => {
     // DOM要素の取得
     const timerTab = document.getElementById('timerTab');
     const scoreTab = document.getElementById('scoreTab');
+    const historyTab = document.getElementById('historyTab');
     const timerSection = document.getElementById('timer-section');
     const scoreSection = document.getElementById('score-section');
+    const historySection = document.getElementById('history-section');
 
     const startStopButton = document.getElementById('startStopButton');
     const exchangeButton = document.getElementById('exchangeButton');
     const resetButton = document.getElementById('resetButton');
     const scoreResetButton = document.getElementById('scoreResetButton');
+    const saveScoreButton = document.getElementById('saveScoreButton');
 
     const minutesInput = document.getElementById('minutes-input');
     const secondsInput = document.getElementById('seconds-input');
@@ -40,13 +43,9 @@ document.addEventListener('DOMContentLoaded', () => {
     
     const totalScoreDisplay = document.getElementById('total-score-value');
     const scoreHeaderValue = document.getElementById('score-header-value');
+    const scoreHistoryList = document.getElementById('score-history-list');
 
     const scoreForm = document.querySelector('.score-form');
-
-    // スプレッドシート連携のDOM要素
-    const spreadsheetUrlInput = document.getElementById('spreadsheet-url');
-    const exportButton = document.getElementById('exportButton');
-    const exportStatus = document.getElementById('exportStatus');
 
     // タイマーの設定
     let totalTime = 150;
@@ -87,7 +86,6 @@ document.addEventListener('DOMContentLoaded', () => {
         let m15Score = 0;
         let totalScore = 0;
 
-        // 大きさ点検ボーナスの計算
         const sizeBonusValue = getSelectedValue('size-bonus');
         if (sizeBonusValue === 'true') {
             sizeBonusScore = 20;
@@ -95,7 +93,6 @@ document.addEventListener('DOMContentLoaded', () => {
         sizeBonusScoreDisplay.textContent = sizeBonusScore;
         totalScore += sizeBonusScore;
 
-        // 精密トークンの計算
         const tokenCount = parseInt(getSelectedValue('precision-tokens'), 10) || 0;
         switch (tokenCount) {
             case 6:
@@ -121,92 +118,78 @@ document.addEventListener('DOMContentLoaded', () => {
         precisionTokensScoreDisplay.textContent = precisionTokensScore;
         totalScore += precisionTokensScore;
 
-        // M01 表面清掃の計算
         const m01SoilScore = parseInt(getSelectedValue('m01-soil'), 10) || 0;
         const m01BrushScore = parseInt(getSelectedValue('m01-brush'), 10) || 0;
         m01Score = m01SoilScore + m01BrushScore;
         m01ScoreDisplay.textContent = m01Score;
         totalScore += m01Score;
 
-        // M02 地図の露出の計算
         const m02TopsoilScore = parseInt(getSelectedValue('m02-topsoil'), 10) || 0;
         m02Score = m02TopsoilScore;
         m02ScoreDisplay.textContent = m02Score;
         totalScore += m02Score;
         
-        // M03 鉱抗の探査の計算
         const m03YourCartScore = parseInt(getSelectedValue('m03-your-cart'), 10) || 0;
         const m03OpponentCartScore = parseInt(getSelectedValue('m03-opponent-cart'), 10) || 0;
         m03Score = m03YourCartScore + m03OpponentCartScore;
         m03ScoreDisplay.textContent = m03Score;
         totalScore += m03Score;
 
-        // M04 慎重な回収の計算
         const m04MineralsScore = parseInt(getSelectedValue('m04-minerals'), 10) || 0;
         const m04PillarsScore = parseInt(getSelectedValue('m04-pillars'), 10) || 0;
         m04Score = m04MineralsScore + m04PillarsScore;
         m04ScoreDisplay.textContent = m04Score;
         totalScore += m04Score;
 
-        // M05 誰が住んでいた？の計算
         const m05FloorScore = parseInt(getSelectedValue('m05-floor'), 10) || 0;
         m05Score = m05FloorScore;
         m05ScoreDisplay.textContent = m05Score;
         totalScore += m05Score;
 
-        // M06 鍛治場の計算
         const m06OreScore = parseInt(getSelectedValue('m06-ore'), 10) || 0;
         m06Score = m06OreScore;
         m06ScoreDisplay.textContent = m06Score;
         totalScore += m06Score;
 
-        // M07 力仕事の計算
         const m07MortarScore = parseInt(getSelectedValue('m07-mortar'), 10) || 0;
         m07Score = m07MortarScore;
         m07ScoreDisplay.textContent = m07Score;
         totalScore += m07Score;
         
-        // M08 サイロの計算
         const m08FoodScore = parseInt(getSelectedValue('m08-food'), 10) || 0;
         m08Score = m08FoodScore;
         m08ScoreDisplay.textContent = m08Score;
         totalScore += m08Score;
 
-        // M09 何を売っていた？の計算
         const m09RoofScore = parseInt(getSelectedValue('m09-roof'), 10) || 0;
         const m09GoodsScore = parseInt(getSelectedValue('m09-goods'), 10) || 0;
         m09Score = m09RoofScore + m09GoodsScore;
         m09ScoreDisplay.textContent = m09Score;
         totalScore += m09Score;
 
-        // M10 はかりの計算
         const m10ScaleTiltScore = parseInt(getSelectedValue('m10-scale-tilt'), 10) || 0;
         const m10ScaleDishScore = parseInt(getSelectedValue('m10-scale-dish'), 10) || 0;
         m10Score = m10ScaleTiltScore + m10ScaleDishScore;
         m10ScoreDisplay.textContent = m10Score;
         totalScore += m10Score;
 
-        // M11 港の遺物の計算
         const m11RelicLiftScore = parseInt(getSelectedValue('m11-relic-lift'), 10) || 0;
         const m11FlagDownScore = parseInt(getSelectedValue('m11-flag-down'), 10) || 0;
         m11Score = m11RelicLiftScore + m11FlagDownScore;
         m11ScoreDisplay.textContent = m11Score;
         totalScore += m11Score;
 
-        // M12 船の救出の計算
         const m12SandScore = parseInt(getSelectedValue('m12-sand'), 10) || 0;
         const m12BoatScore = parseInt(getSelectedValue('m12-boat'), 10) || 0;
         m12Score = m12SandScore + m12BoatScore;
         m12ScoreDisplay.textContent = m12Score;
         totalScore += m12Score;
 
-        // M13 像の復元の計算
         const m13StatueScore = parseInt(getSelectedValue('m13-statue'), 10) || 0;
         m13Score = m13StatueScore;
         m13ScoreDisplay.textContent = m13Score;
         totalScore += m13Score;
 
-        // M14 フォーラムの計算
         const m14BrushScore = parseInt(getSelectedValue('m14-brush'), 10) || 0;
         const m14CartScore = parseInt(getSelectedValue('m14-cart'), 10) || 0;
         const m14DishScore = parseInt(getSelectedValue('m14-dish'), 10) || 0;
@@ -218,13 +201,11 @@ document.addEventListener('DOMContentLoaded', () => {
         m14ScoreDisplay.textContent = m14Score;
         totalScore += m14Score;
 
-        // M15 発見現場のマーケティングの計算
         const m15FlagScore = parseInt(getSelectedValue('m15-flag'), 10) || 0;
         m15Score = m15FlagScore;
         m15ScoreDisplay.textContent = m15Score;
         totalScore += m15Score;
         
-        // 合計点を表示
         totalScoreDisplay.textContent = totalScore;
         scoreHeaderValue.textContent = ` (${totalScore}点)`;
     }
@@ -249,16 +230,29 @@ document.addEventListener('DOMContentLoaded', () => {
     timerTab.addEventListener('click', () => {
         timerTab.classList.add('active');
         scoreTab.classList.remove('active');
+        historyTab.classList.remove('active');
         timerSection.classList.add('active');
         scoreSection.classList.remove('active');
+        historySection.classList.remove('active');
     });
 
     scoreTab.addEventListener('click', () => {
-        timerSection.classList.remove('active');
-        scoreSection.classList.add('active');
-        timerTab.classList.remove('active');
         scoreTab.classList.add('active');
+        timerTab.classList.remove('active');
+        historyTab.classList.remove('active');
+        scoreSection.classList.add('active');
+        timerSection.classList.remove('active');
+        historySection.classList.remove('active');
         calculateScore();
+    });
+    
+    historyTab.addEventListener('click', () => {
+        historyTab.classList.add('active');
+        timerTab.classList.remove('active');
+        scoreTab.classList.remove('active');
+        historySection.classList.add('active');
+        scoreSection.classList.remove('active');
+        timerSection.classList.remove('active');
     });
 
     // --- タイマー機能 ---
@@ -276,14 +270,12 @@ document.addEventListener('DOMContentLoaded', () => {
         
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-        // 背景の円
         ctx.beginPath();
         ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI);
         ctx.strokeStyle = '#ddd';
         ctx.lineWidth = 20;
         ctx.stroke();
 
-        // 残り時間を示す円
         ctx.beginPath();
         const endAngle = -0.5 * Math.PI + (2 * Math.PI * progress);
         ctx.arc(centerX, centerY, radius, -0.5 * Math.PI, endAngle);
@@ -385,24 +377,50 @@ document.addEventListener('DOMContentLoaded', () => {
         totalRunTimeDisplay.textContent = '0';
         totalExchangeTimeDisplay.textContent = '0';
 
-        // スコア集計のリセット
         resetScoreButtons();
         calculateScore();
     });
 
-    // 新しく追加したスコア用リセットボタンのイベント
     scoreResetButton.addEventListener('click', () => {
         resetScoreButtons();
         calculateScore();
     });
 
-    // スコアボタンのリセット関数
+    saveScoreButton.addEventListener('click', () => {
+        const li = document.createElement('li');
+        li.classList.add('saved-score-item');
+
+        const scoreItems = document.querySelectorAll('.score-item h3');
+        const scoreValues = document.querySelectorAll('.score-item p span:last-child');
+        
+        let detailsHtml = '';
+        
+        scoreItems.forEach((item, index) => {
+            const title = item.textContent.trim();
+            const value = scoreValues[index].textContent;
+            detailsHtml += `<div class="history-details-item"><span class="label">${title}:</span><span>${value}</span></div>`;
+        });
+
+        const timestamp = new Date().toLocaleString();
+        const totalScore = totalScoreDisplay.textContent;
+
+        li.innerHTML = `
+            <div class="history-header">
+                <span>保存日時: ${timestamp}</span>
+                <span>合計: ${totalScore}点</span>
+            </div>
+            <div class="history-details">
+                ${detailsHtml}
+            </div>
+        `;
+        scoreHistoryList.prepend(li); // 新しい記録を先頭に追加
+    });
+
     function resetScoreButtons() {
         document.querySelectorAll('.score-btn').forEach(btn => {
             btn.classList.remove('selected');
         });
 
-        // 各項目のデフォルトボタンを選択
         document.querySelector('.button-group[data-target="size-bonus"] .score-btn[data-value="true"]').classList.add('selected');
         document.querySelector('.button-group[data-target="precision-tokens"] .score-btn[data-value="6"]').classList.add('selected');
         document.querySelector('.button-group[data-target="m01-soil"] .score-btn[data-value="0"]').classList.add('selected');
@@ -435,79 +453,9 @@ document.addEventListener('DOMContentLoaded', () => {
         document.querySelector('.button-group[data-target="m15-flag"] .score-btn[data-value="0"]').classList.add('selected');
     }
 
-    // ページ読み込み時にデフォルトのボタンを選択
     resetScoreButtons();
     calculateScore();
 
-    // 初期表示
     updateInputs(timeLeft);
     drawTimerCircle(1);
-    
-    // スプレッドシートへのエクスポートイベント
-    exportButton.addEventListener('click', () => {
-        const url = spreadsheetUrlInput.value;
-        if (!url) {
-            exportStatus.textContent = 'エラー: スプレッドシートのURLを入力してください。';
-            exportStatus.style.color = 'red';
-            return;
-        }
-
-        const scoreData = getScoreData();
-        const sheetUrl = 'https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec'; // ここをGoogle Apps ScriptのURLに置き換える
-
-        exportStatus.textContent = '送信中...';
-        exportStatus.style.color = 'black';
-
-        fetch(sheetUrl, {
-            method: 'POST',
-            body: JSON.stringify(scoreData),
-            mode: 'no-cors' // CORSエラーを回避
-        })
-        .then(response => {
-            exportStatus.textContent = '成功: データがスプレッドシートに送信されました。';
-            exportStatus.style.color = 'green';
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            exportStatus.textContent = 'エラー: データの送信に失敗しました。';
-            exportStatus.style.color = 'red';
-        });
-    });
-
-    function getScoreData() {
-        const data = {};
-        
-        // タイムデータを取得
-        const timeDiff = totalTime - timeLeft;
-        data['totalTime'] = timeDiff;
-        data['totalRunTime'] = totalRunTimeDisplay.textContent;
-        data['totalExchangeTime'] = totalExchangeTimeDisplay.textContent;
-        data['finalScore'] = totalScoreDisplay.textContent;
-
-        // スコアデータを取得
-        const scoreItems = document.querySelectorAll('.score-item');
-        scoreItems.forEach(item => {
-            const title = item.querySelector('h3').textContent.trim();
-            const group = item.querySelector('.button-group');
-            if (group) {
-                const target = group.dataset.target;
-                const value = getSelectedValue(target);
-                data[title] = value;
-            }
-        });
-
-        // M01とM14の合計点を分解して取得
-        data['M01 土層'] = getSelectedValue('m01-soil');
-        data['M01 発掘ブラシ'] = getSelectedValue('m01-brush');
-        
-        data['M14 ブラシ'] = getSelectedValue('m14-brush');
-        data['M14 トロッコ'] = getSelectedValue('m14-cart');
-        data['M14 はかりの皿'] = getSelectedValue('m14-dish');
-        data['M14 表土'] = getSelectedValue('m14-topsoil');
-        data['M14 貴重な遺物'] = getSelectedValue('m14-relic');
-        data['M14 化石化した遺物を含む鉱石'] = getSelectedValue('m14-ore');
-        data['M14 石臼'] = getSelectedValue('m14-mortar');
-
-        return data;
-    }
 });

@@ -8,13 +8,13 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=BIZ+UD+Gothic&display=swap" rel="stylesheet">
-</head>
-<body>
+</head><body>
     <header>
         <h1>FLL Challenge UNEARTHED</h1>
         <nav class="tab-bar">
             <button id="timerTab" class="tab-button active">ストップウォッチ</button>
             <button id="scoreTab" class="tab-button">スコア集計</button>
+            <button id="historyTab" class="tab-button">履歴</button>
         </nav>
     </header>
 
@@ -343,15 +343,14 @@
             </div>
             
             <button id="scoreResetButton" class="score-reset-button">スコアをリセット</button>
-            
-            <div class="export-to-sheet">
-                <h3>スプレッドシートにエクスポート</h3>
-                <label for="spreadsheet-url">スプレッドシートのURL</label>
-                <input type="text" id="spreadsheet-url" placeholder="ここにGoogleスプレッドシートのURLを入力">
-                <button id="exportButton" class="export-button">データを送信</button>
-                <div id="exportStatus" class="export-status"></div>
-            </div>
+            <button id="saveScoreButton" class="score-save-button">保存</button>
+        </section>
 
+        <section id="history-section" class="content">
+            <h2>履歴</h2>
+            <div class="saved-scores-container">
+                <div id="score-history-list"></div>
+            </div>
         </section>
     </main>
 

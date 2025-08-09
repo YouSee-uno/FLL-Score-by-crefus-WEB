@@ -100,17 +100,17 @@ header {
 
 /* スタート/ストップボタンのスタイル */
 #startStopButton {
-    border: 2px solid #ff7f00; /* オレンジの枠線 */
-    color: #ff7f00; /* 文字色も枠線と同じ色に */
+    border: 2px solid #ff7f00;
+    color: #ff7f00;
 }
 
 #startStopButton:hover {
-    background-color: #fff3e6; /* ホバー時の色 */
+    background-color: #fff3e6;
 }
 
 /* 交換中ボタンのスタイル */
 #exchangeButton {
-    border: 2px solid #28a745; /* 緑の枠線 */
+    border: 2px solid #28a745;
     color: #28a745;
 }
 
@@ -119,12 +119,12 @@ header {
 }
 
 /* リセットボタンのスタイル */
-#resetButton {
-    border: 2px solid #dc3545; /* 赤の枠線 */
+#resetButton, #scoreResetButton {
+    border: 2px solid #dc3545;
     color: #dc3545;
 }
 
-#resetButton:hover {
+#resetButton:hover, #scoreResetButton:hover {
     background-color: #fcebeb;
 }
 
@@ -163,8 +163,7 @@ header {
     font-weight: bold;
 }
 
-/* ...（これまでのCSSコード）... */
-
+/* スコア集計セクションのスタイル */
 #score-section {
     max-width: 600px;
     margin: 0 auto;
@@ -188,65 +187,13 @@ header {
     margin-top: 0;
 }
 
-.score-item label {
-    display: inline-block;
-    margin-right: 15px;
-}
-
-#precision-tokens {
-    width: 50px;
-    text-align: center;
-    font-size: 16px;
-}
-
-.total-score {
-    text-align: right;
-    margin-top: 20px;
-    font-size: 24px;
-    font-weight: bold;
-}
-
-/* ...（これまでのCSSコード）... */
-.score-form {
-    background-color: #fff;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-.score-item {
-    border-bottom: 1px solid #ccc;
-    padding-bottom: 15px;
-    margin-bottom: 15px;
-}
-
-.score-item h3 {
-    margin-top: 0;
-}
-
-.score-item label {
-    display: inline-block;
-    margin-right: 15px;
+.score-item p {
+    margin-bottom: 5px;
 }
 
 .score-option {
     margin: 10px 0;
 }
-
-#precision-tokens {
-    width: 50px;
-    text-align: center;
-    font-size: 16px;
-}
-
-.total-score {
-    text-align: right;
-    margin-top: 20px;
-    font-size: 24px;
-    font-weight: bold;
-}
-
-/* ...（これまでのCSSコード）... */
 
 .button-group {
     display: flex;
@@ -255,28 +202,27 @@ header {
     margin-top: 5px;
 }
 
+/* ★ここを修正します★ */
 .score-btn {
     padding: 8px 12px;
     font-size: 14px;
     border: 1px solid #ccc;
     background-color: #f8f9fa;
+    color: black;
     cursor: pointer;
     border-radius: 5px;
-    transition: background-color 0.2s, border-color 0.2s;
+    transition: background-color 0.2s, border-color 0.2s, color 0.2s;
 }
 
 .score-btn:hover {
     background-color: #e2e6ea;
 }
 
-/* 選択されたボタンのスタイル */
 .score-btn.selected {
-    background-color: #007bff;
-    color: white;
-    border-color: #007bff;
+    background-color: #007bff !important;
+    color: white !important;
+    border-color: #007bff !important;
 }
-
-/* ...（これまでのCSSコード）... */
 
 .total-score {
     text-align: right;
@@ -285,75 +231,77 @@ header {
     font-weight: bold;
 }
 
-/* スコア集計用リセットボタンのスタイル */
-.score-reset-button {
+/* スコア集計セクションのボタン */
+#score-section button {
     font-size: 18px;
     padding: 10px 20px;
-    margin-top: 20px;
-    cursor: pointer;
-    background-color: #dc3545; /* 赤色 */
-    color: white;
-    border: none;
+    border: 2px solid #007bff;
+    background-color: white;
+    color: #007bff;
     border-radius: 5px;
-}
-
-.score-reset-button:hover {
-    background-color: #c82333;
-}
-
-/* ...（これまでのCSSコード）... */
-
-/* スコア集計用リセットボタンのスタイル */
-.score-reset-button {
-    font-size: 18px;
-    padding: 10px 20px;
-    margin-top: 20px;
     cursor: pointer;
-    background-color: #dc3545; /* 赤色 */
-    color: white;
-    border: none;
-    border-radius: 5px;
+    margin-top: 10px;
 }
 
-.score-reset-button:hover {
-    background-color: #c82333;
+#score-section button:hover {
+    background-color: #e6f5ff;
 }
 
-/* スプレッドシート連携機能のスタイル */
-.export-to-sheet {
+/* 履歴セクションのスタイル */
+#history-section {
+    max-width: 600px;
+    margin: 0 auto;
+    text-align: left;
+}
+
+.saved-scores-container {
     margin-top: 30px;
     padding: 20px;
-    background-color: #e6f5e9;
+    background-color: #f8f9fa;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    overflow-x: auto;
 }
 
-.export-to-sheet h3 {
-    margin-top: 0;
+#score-history-list {
+    display: flex;
+    gap: 15px;
+    padding: 0;
+    list-style: none;
 }
 
-#spreadsheet-url {
-    width: 90%;
-    padding: 8px;
-    font-size: 16px;
+.saved-score-item {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 15px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    flex-shrink: 0;
+    width: 250px;
+}
+
+.history-header {
+    font-weight: bold;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
     margin-bottom: 10px;
 }
 
-.export-button {
-    font-size: 18px;
-    padding: 10px 20px;
-    background-color: #28a745;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-.export-button:hover {
-    background-color: #218838;
-}
-
-.export-status {
-    margin-top: 10px;
+.history-details {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
     font-size: 14px;
+}
+
+.history-details-item {
+    display: flex;
+    justify-content: space-between;
+}
+
+.history-details-item .label {
+    font-weight: normal;
 }
