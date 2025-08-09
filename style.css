@@ -300,3 +300,60 @@ header {
 .score-reset-button:hover {
     background-color: #c82333;
 }
+
+/* ...（これまでのCSSコード）... */
+
+/* スコア集計用リセットボタンのスタイル */
+.score-reset-button {
+    font-size: 18px;
+    padding: 10px 20px;
+    margin-top: 20px;
+    cursor: pointer;
+    background-color: #dc3545; /* 赤色 */
+    color: white;
+    border: none;
+    border-radius: 5px;
+}
+
+.score-reset-button:hover {
+    background-color: #c82333;
+}
+
+/* スプレッドシート連携機能のスタイル */
+.export-to-sheet {
+    margin-top: 30px;
+    padding: 20px;
+    background-color: #e6f5e9;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.export-to-sheet h3 {
+    margin-top: 0;
+}
+
+#spreadsheet-url {
+    width: 90%;
+    padding: 8px;
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+.export-button {
+    font-size: 18px;
+    padding: 10px 20px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.export-button:hover {
+    background-color: #218838;
+}
+
+.export-status {
+    margin-top: 10px;
+    font-size: 14px;
+}

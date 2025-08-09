@@ -8,8 +8,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const startStopButton = document.getElementById('startStopButton');
     const exchangeButton = document.getElementById('exchangeButton');
     const resetButton = document.getElementById('resetButton');
-
-    // 新しいスコアリセットボタンの要素を取得
     const scoreResetButton = document.getElementById('scoreResetButton');
 
     const minutesInput = document.getElementById('minutes-input');
@@ -44,6 +42,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const scoreHeaderValue = document.getElementById('score-header-value');
 
     const scoreForm = document.querySelector('.score-form');
+
+    // スプレッドシート連携のDOM要素
+    const spreadsheetUrlInput = document.getElementById('spreadsheet-url');
+    const exportButton = document.getElementById('exportButton');
+    const exportStatus = document.getElementById('exportStatus');
 
     // タイマーの設定
     let totalTime = 150;
@@ -439,4 +442,72 @@ document.addEventListener('DOMContentLoaded', () => {
     // 初期表示
     updateInputs(timeLeft);
     drawTimerCircle(1);
+    
+    // スプレッドシートへのエクスポートイベント
+    exportButton.addEventListener('click', () => {
+        const url = spreadsheetUrlInput.value;
+        if (!url) {
+            exportStatus.textContent = 'エラー: スプレッドシートのURLを入力してください。';
+            exportStatus.style.color = 'red';
+            return;
+        }
+
+        const scoreData = getScoreData();
+        const sheetUrl = 'https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec'; // ここをGoogle Apps ScriptのURLに置き換える
+
+        exportStatus.textContent = '送信中...';
+        exportStatus.style.color = 'black';
+
+        fetch(sheetUrl, {
+            method: 'POST',
+            body: JSON.stringify(scoreData),
+            mode: 'no-cors' // CORSエラーを回避
+        })
+        .then(response => {
+            exportStatus.textContent = '成功: データがスプレッドシートに送信されました。';
+            exportStatus.style.color = 'green';
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            exportStatus.textContent = 'エラー: データの送信に失敗しました。';
+            exportStatus.style.color = 'red';
+        });
+    });
+
+    function getScoreData() {
+        const data = {};
+        
+        // タイムデータを取得
+        const timeDiff = totalTime - timeLeft;
+        data['totalTime'] = timeDiff;
+        data['totalRunTime'] = totalRunTimeDisplay.textContent;
+        data['totalExchangeTime'] = totalExchangeTimeDisplay.textContent;
+        data['finalScore'] = totalScoreDisplay.textContent;
+
+        // スコアデータを取得
+        const scoreItems = document.querySelectorAll('.score-item');
+        scoreItems.forEach(item => {
+            const title = item.querySelector('h3').textContent.trim();
+            const group = item.querySelector('.button-group');
+            if (group) {
+                const target = group.dataset.target;
+                const value = getSelectedValue(target);
+                data[title] = value;
+            }
+        });
+
+        // M01とM14の合計点を分解して取得
+        data['M01 土層'] = getSelectedValue('m01-soil');
+        data['M01 発掘ブラシ'] = getSelectedValue('m01-brush');
+        
+        data['M14 ブラシ'] = getSelectedValue('m14-brush');
+        data['M14 トロッコ'] = getSelectedValue('m14-cart');
+        data['M14 はかりの皿'] = getSelectedValue('m14-dish');
+        data['M14 表土'] = getSelectedValue('m14-topsoil');
+        data['M14 貴重な遺物'] = getSelectedValue('m14-relic');
+        data['M14 化石化した遺物を含む鉱石'] = getSelectedValue('m14-ore');
+        data['M14 石臼'] = getSelectedValue('m14-mortar');
+
+        return data;
+    }
 });
